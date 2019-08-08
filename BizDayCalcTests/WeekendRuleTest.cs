@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
 using BizDayCalc;
+using System.Linq;
 
 namespace BizDayCalcTests
 {
-    public class UnitTest1
+    public class WeekendRuleTest
     {
         [Fact]
         public void TestCheckIsBusinessDay()
@@ -31,6 +33,25 @@ namespace BizDayCalcTests
         {
             var rule = new WeekendRule();
             Assert.False(rule.CheckIsBusinessDay(DateTime.Parse(date)));
+        }
+
+        [Theory]
+        [MemberData(nameof(Days))]
+        public void TestCheckIsBusinessDay2(bool expected, DateTime date)
+        {
+            var rule = new WeekendRule();
+            Assert.Equal(expected, rule.CheckIsBusinessDay(date));
+        }
+
+        public static IEnumerable<object[]> Days
+        {
+            get 
+            {
+                yield return new object[] {true, new DateTime(2016, 6, 27)};
+                yield return new object[] {true, new DateTime(2016, 3, 1)};
+                yield return new object[] {false, new DateTime(2016, 6, 26)};
+                yield return new object[] {false, new DateTime(2016, 11, 12)};
+            }
         }
     }
 
